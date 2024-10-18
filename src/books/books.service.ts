@@ -1,14 +1,19 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Book } from '../entities/book.entity';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Book } from "../entities/book.entity";
 
 @Injectable()
 export class BooksService {
   constructor(
     @InjectRepository(Book)
-    private readonly booksRepository: Repository<Book>,
+    private readonly booksRepository: Repository<Book>
   ) {}
+
+  // Method to find a book by title
+  async findByTitle(title: string): Promise<Book | undefined> {
+    return this.booksRepository.findOne({ where: { title } });
+  }
 
   async findAll(): Promise<Book[]> {
     return this.booksRepository.find();

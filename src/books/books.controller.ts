@@ -7,11 +7,12 @@ import {
   Body,
   Param,
   ParseIntPipe,
-} from '@nestjs/common';
-import { BooksService } from './books.service';
-import { Book } from '../entities/book.entity';
+  BadRequestException,
+} from "@nestjs/common";
+import { BooksService } from "./books.service";
+import { Book } from "../entities/book.entity";
 
-@Controller('books')
+@Controller("books")
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
@@ -20,26 +21,35 @@ export class BooksController {
     return this.booksService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<Book> {
+  @Get(":id")
+  findOne(@Param("id", ParseIntPipe) id: number): Promise<Book> {
     return this.booksService.findOne(id);
   }
 
   @Post()
-  create(@Body() book: Book): Promise<Book> {
+  async create(@Body() book: Book): Promise<Book> {
+    // Check if the title is already taken
+    const existingBook = await this.booksService.findByTitle(book.title);
+    if (existingBook) {
+      throw new BadRequestException(
+        "Book title already exists. Please choose a unique title."
+      );
+    }
+
+    // If no existing book is found, proceed to create a new book
     return this.booksService.create(book);
   }
 
-  @Put(':id')
+  @Put(":id")
   update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() book: Partial<Book>,
+    @Param("id", ParseIntPipe) id: number,
+    @Body() book: Partial<Book>
   ): Promise<Book> {
     return this.booksService.update(id, book);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  @Delete(":id")
+  remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return this.booksService.remove(id);
   }
 }
