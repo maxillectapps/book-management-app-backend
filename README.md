@@ -1,73 +1,138 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Book Management App Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Welcome to the **Book Management App Backend**! This project is built using **NestJS**, **TypeORM**, and **MySQL**. Follow the instructions below to set up the project locally and get it running smoothly.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Prerequisites
 
-## Description
+To run this project, you will need the following installed on your machine:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Node.js** (v16 or higher recommended)
+- **npm** or **yarn**
+- **MySQL** (or compatible database like MariaDB)
+- **Git**
 
-## Installation
+## Setup Instructions
+
+### 1. Clone the Repository
+
+To start, clone this repository to your local machine:
 
 ```bash
-$ npm install
+git clone https://github.com/maxillectapps/book-management-app-backend.git
+cd book-management-app-backend
 ```
 
-## Running the app
+### 2. Install Dependencies
+
+Once you are inside the project directory, install the required dependencies:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Test
+or if you prefer **yarn**:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+yarn install
 ```
 
-## Support
+### 3. Environment Configuration
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Create a `.env` file at the root of the project to store your environment variables. Use `.env.example` as a reference.
 
-## Stay in touch
+Create a new file `.env`:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=your_password
+DB_DATABASE=book_management_db
+PORT=5500
+```
 
-## License
+- **DB_HOST**: The host where your database is running (e.g., `localhost`).
+- **DB_PORT**: Port number for your database (default is `3306` for MySQL).
+- **DB_USERNAME**: Your database username.
+- **DB_PASSWORD**: Your database password.
+- **DB_DATABASE**: The name of your database.
+- **PORT**: The port for the NestJS application to run (default is `5500`).
 
-Nest is [MIT licensed](LICENSE).
+### 4. Database Setup
+
+You need to set up a MySQL database for this project.
+
+1. Start MySQL and create a database called `book_management_db`:
+
+   ```sql
+   CREATE DATABASE book_management_db;
+   ```
+
+2. Make sure the credentials in your `.env` file match your MySQL settings.
+
+3. Run TypeORM migrations to set up the database schema:
+
+   ```bash
+   npm run typeorm migration:run
+   ```
+
+### 5. Run the Application
+
+You can run the application in **development** mode or **production** mode.
+
+#### Development Mode
+
+To start the server in development mode:
+
+```bash
+npm run start:dev
+```
+
+The server will start on the port specified in the `.env` file (e.g., `http://localhost:5500`).
+
+#### Production Mode
+
+First, build the project:
+
+```bash
+npm run build
+```
+
+Then start the server:
+
+```bash
+npm run start:prod
+```
+
+### 6. API Endpoints
+
+The following endpoints are available in this backend:
+
+| Method | Endpoint     | Description                   |
+| ------ | ------------ | ----------------------------- |
+| POST   | `/books`     | Add a new book                |
+| GET    | `/books`     | Get the list of all books     |
+| GET    | `/books/:id` | Get a specific book by its ID |
+| PUT    | `/books/:id` | Update a book's information   |
+| DELETE | `/books/:id` | Delete a book by its ID       |
+
+### 7. Common Issues
+
+- **Database Connection Error**: Ensure that your database credentials in the `.env` file are correct and that MySQL is running.
+- **Port in Use**: Make sure the port specified in the `.env` file (default `3000`) is available and not used by another process.
+
+### 8. Testing the Application
+
+You can use tools like **Postman** or **cURL** to test the API endpoints. For example, to get all books:
+
+```bash
+curl http://localhost:5500/books
+```
+
+### License
+
+This project is licensed under the MIT License.
+
+---
+
+Feel free to contribute to this project by submitting issues or pull requests. Happy coding!
